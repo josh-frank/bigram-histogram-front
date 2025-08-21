@@ -1,0 +1,11 @@
+figure {
+  width: 90vw;
+  margin: 0 auto;
+}
+
+section {
+  width: 100vw;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
