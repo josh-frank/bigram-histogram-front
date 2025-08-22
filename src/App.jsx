@@ -9,7 +9,7 @@ import {
   // splitText,
 } from './utilities'
 import { exampleTexts } from './exampleTexts'
-import { responseToJson, useHistogram } from './hooks'
+import { useHistogram } from './hooks'
 
 function App() {
 
@@ -70,10 +70,10 @@ function App() {
   const { mutate: saveHistogram } = useHistogram( state.textInput )
 
   const handleSaveHistogram = async () => await saveHistogram( state.textInput )
-    .then( responseToJson )
-    .then( ( { id } ) => {
-      window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ id }` );
-    } );
+  .then( ( response ) => {
+    console.log( response );
+    window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
+  } )
 
   return <main>
 
