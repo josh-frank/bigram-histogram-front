@@ -15,12 +15,12 @@ function App() {
   const [ state, setState ] = useState( {
     exampleText: 'Custom input',
     textInput: '',
-    minimumFrequency: 2,
+    minimumFrequency: 3,
   } );
 
   const histo = Object.entries( bigramHisto( state.textInput ) )
     .reduce( ( result, [ bigram, count ] ) => {
-      if ( count > state.minimumFrequency ) result.push( { bigram, count } );
+      if ( count >= state.minimumFrequency ) result.push( { bigram, count } );
       return result;
     }, [] )
     .sort( ( thisBigram, thatBigram ) => thisBigram.count < thatBigram.count )
@@ -39,6 +39,7 @@ function App() {
     },
     yAxis: {
       allowDecimals: false,
+      title: { text: 'Frequency', },
     },
     tooltip: {
       formatter: function() {
@@ -68,35 +69,39 @@ function App() {
 
     <form>
 
-      <label htmlFor='example-text'>Select an example text:</label>
-      &nbsp;
-      <select
-        name='example-text'
-        value={ state.exampleText }
-        onChange={ ( { target } ) => {
-          setState( {
-            ...state,
-            exampleText: target.value,
-            textInput: exampleTexts[ target.value ],
-          } )
-        } }
-      >
-        { Object.keys( exampleTexts ).map( title => 
-          <option key={ title } value={ title }>{ title }</option>
-        ) }
-      </select>
+      <section>
+        <label htmlFor='example-text'>Select an example text:</label>
+        &nbsp;
+        <select
+          name='example-text'
+          value={ state.exampleText }
+          onChange={ ( { target } ) => {
+            setState( {
+              ...state,
+              exampleText: target.value,
+              textInput: exampleTexts[ target.value ],
+            } )
+          } }
+        >
+          { Object.keys( exampleTexts ).map( title => 
+            <option key={ title } value={ title }>{ title }</option>
+          ) }
+        </select>
+      </section>
 
-      <label htmlFor='minimum-freq'>Minimum frequency to display:</label>
-      &nbsp;
-      <input
-        type='number'
-        name='minimum-freq'
-        value={ state.minimumFrequency }
-        onChange={ ( { target } ) =>
-          setState( { ...state, minimumFrequency: parseInt( target.value ) } )
-        }
-        min={ 2 }
-      />
+      <section>
+        <label htmlFor='minimum-freq'>Minimum bigram frequency to display:</label>
+        &nbsp;
+        <input
+          type='number'
+          name='minimum-freq'
+          value={ state.minimumFrequency }
+          onChange={ ( { target } ) =>
+            setState( { ...state, minimumFrequency: parseInt( target.value ) } )
+          }
+          min={ 2 }
+        />
+      </section>
 
     </form>
 
