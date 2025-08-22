@@ -9,6 +9,7 @@ import {
   // splitText,
 } from './utilities'
 import { exampleTexts } from './exampleTexts'
+import { useHistogram } from './hooks'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
     textInput: '',
     minimumFrequency: 3,
   } );
+
 
   const histo = Object.entries( bigramHisto( state.textInput ) )
     .reduce( ( result, [ bigram, count ] ) => {
@@ -65,9 +67,13 @@ function App() {
     credits: { enabled: false, },
   };
 
+  const { mutate: saveHistogram } = useHistogram( state.textInput )
+
+  const handleSaveHistogram = async () => await saveHistogram( state.textInput ).then( console.log )
+
   return <main>
 
-    <form>
+    <form action={ handleSaveHistogram }>
 
       <div>
         <label htmlFor='example-text'>Select an example text:</label>
@@ -102,6 +108,12 @@ function App() {
           min={ 2 }
         />
       </div>
+
+      <input
+        type="submit"
+        value="Save"
+        disabled={ state.exampleText != 'Custom input' }
+      />
 
     </form>
 
