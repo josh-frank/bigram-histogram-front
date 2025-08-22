@@ -69,7 +69,9 @@ function App() {
 
   const { mutate: saveHistogram } = useHistogram( state.textInput )
 
-  const handleSaveHistogram = async () => await saveHistogram( state.textInput ).then( console.log )
+  const handleSaveHistogram = async () => await saveHistogram( state.textInput ).then( ( { id } ) => {
+    window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ id }` );
+  } )
 
   return <main>
 
