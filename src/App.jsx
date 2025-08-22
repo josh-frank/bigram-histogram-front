@@ -9,10 +9,6 @@ import {
   // splitText,
 } from './utilities'
 import { exampleTexts } from './exampleTexts'
-import {
-  server,
-  // useHistogram
-} from './hooks'
 import useSWRMutation from 'swr/mutation'
 
 function App() {
@@ -28,64 +24,36 @@ function App() {
       if ( count >= state.minimumFrequency ) result.push( { bigram, count } );
       return result;
     }, [] )
-    .sort( ( thisBigram, thatBigram ) => thisBigram.count < thatBigram.count )
+    .sort( ( { count: thisCount }, { count: thatCount } ) => thisCount < thatCount )
+
+
+  const {
+    trigger,
+    // isMutating
+  } = useSWRMutation(
+    `http://172.104.210.107/histogram`,
+    async url => fetch( url, {
+      headers: new Headers( {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      } ),
+      method: 'POST',
+      body: JSON.stringify( { histogram: { corpus: state.textInput } } )
+    } ).then( response => response.json() ),
+    // options
+  )
+
+  const handleSaveHistogram = async () => await trigger().then( ( response ) => {
+    window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
+    const newTab = window.open( `http://172.104.210.107/histogram/${ response.id }`, '_blank' );
+    newTab.focus();
+  } )
 
   // console.log( {
   //   textInput: state.textInput,
   //   histo,
   //   // splitText: splitText( state.textInput ),
   // } )
-
-  const highchartsOptions = {
-    xAxis: {
-      categories: histo.map( ( { bigram } ) => bigram ),
-      crosshair: true,
-      title: { text: '', },
-    },
-    yAxis: {
-      allowDecimals: false,
-      title: { text: 'Frequency', },
-    },
-    tooltip: {
-      formatter: function() {
-        return `${ this.category }: ${ this.options.y }`;
-      },
-    },
-    series: [ {
-        type: 'bar',
-        height: '80%',
-        data: histo.map( ( { count } ) => count ),
-    } ],
-    navigator: {
-      xAxis: {
-        labels: {
-          formatter: function () {
-            return this.count;
-          },
-        }
-      },
-      // yAxis: {},
-    },
-    rangeSelector: { enabled: false, },
-    credits: { enabled: false, },
-  };
-
-  // const { mutate: saveHistogram } = useHistogram( state.textInput )
-  async function saveHisto( url ) {
-    return fetch( url, {
-      method: 'POST',
-      body: JSON.stringify( { histogram: { corpus: state.textInput } } )
-    } ).then( response => response.json() )
-  }
-  const {
-    trigger,
-    // isMutating
-  } = useSWRMutation( `${ server }/histogram`, saveHisto, /* options */ )
-
-  const handleSaveHistogram = async () => await trigger().then( ( response ) => {
-    console.log( response );
-    window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
-  } )
 
   return <main>
 
@@ -149,7 +117,39 @@ function App() {
       <HighchartsReact
         highcharts={ Highcharts }
         constructorType={ 'stockChart' }
-        options={ highchartsOptions }
+        options={ {
+          xAxis: {
+            categories: histo.map( ( { bigram } ) => bigram ),
+            crosshair: true,
+            title: { text: '', },
+          },
+          yAxis: {
+            allowDecimals: false,
+            title: { text: 'Frequency', },
+          },
+          tooltip: {
+            formatter: function() {
+              return `${ this.category }: ${ this.options.y }`;
+            },
+          },
+          series: [ {
+              type: 'bar',
+              height: '80%',
+              data: histo.map( ( { count } ) => count ),
+          } ],
+          navigator: {
+            xAxis: {
+              labels: {
+                formatter: function () {
+                  return this.count;
+                },
+              }
+            },
+            // yAxis: {},
+          },
+          rangeSelector: { enabled: false, },
+          credits: { enabled: false, },
+        } }
       />
 
     </section>
@@ -158,4 +158,4 @@ function App() {
 
 }
 
-export default App
+export default App;
