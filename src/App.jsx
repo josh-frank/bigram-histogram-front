@@ -69,7 +69,7 @@ function App() {
 
     <form>
 
-      <section>
+      <div>
         <label htmlFor='example-text'>Select an example text:</label>
         &nbsp;
         <select
@@ -87,9 +87,9 @@ function App() {
             <option key={ title } value={ title }>{ title }</option>
           ) }
         </select>
-      </section>
+      </div>
 
-      <section>
+      <div>
         <label htmlFor='minimum-freq'>Minimum bigram frequency to display:</label>
         &nbsp;
         <input
@@ -101,7 +101,7 @@ function App() {
           }
           min={ 2 }
         />
-      </section>
+      </div>
 
     </form>
 
