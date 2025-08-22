@@ -71,19 +71,18 @@ function App() {
   };
 
   // const { mutate: saveHistogram } = useHistogram( state.textInput )
-  async function saveHisto( url, { arg } ) {
+  async function saveHisto( url ) {
     return fetch( url, {
       method: 'POST',
-      body: JSON.stringify( arg )
-    } ).then( res => res.json() )
+      body: JSON.stringify( { histogram: { corpus: state.textInput } } )
+    } ).then( response => response.json() )
   }
   const {
     trigger,
     // isMutating
   } = useSWRMutation( `${ server }/histogram`, saveHisto, /* options */ )
 
-  const handleSaveHistogram = async () => await trigger( { histogram: { corpus: state.textInput } } )
-  .then( ( response ) => {
+  const handleSaveHistogram = async () => await trigger().then( ( response ) => {
     console.log( response );
     window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
   } )
