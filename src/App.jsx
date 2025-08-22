@@ -74,7 +74,7 @@ function App() {
   async function saveHisto( url, { arg } ) {
     return fetch( url, {
       method: 'POST',
-      body: JSON.stringify( { histogram: { corpus: arg } } )
+      body: JSON.stringify( arg )
     } ).then( res => res.json() )
   }
   const {
@@ -82,7 +82,7 @@ function App() {
     // isMutating
   } = useSWRMutation( `${ server }/histogram`, saveHisto, /* options */ )
 
-  const handleSaveHistogram = async () => await trigger( state.textInput )
+  const handleSaveHistogram = async () => await trigger( { histogram: { corpus: state.textInput } } )
   .then( ( response ) => {
     console.log( response );
     window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
