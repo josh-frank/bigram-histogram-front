@@ -5,14 +5,14 @@ export const server = import.meta.env.NODE_ENV === 'development' ? 'http://local
 
 export const responseToJson = response => response.json()
 
-export const useHistogram = histogram => {
+export const useHistogram = corpus => {
   const { data, mutate, error, loading } = useSWR( `${ server }/histogram`, url => fetch( url, {
     headers: new Headers( {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     } ),
     method: 'POST',
-    body: JSON.stringify( { histogram } )
+    body: JSON.stringify( { histogram: { corpus } } )
   } ).then( responseToJson ) )
   return {
     histogram: data,
