@@ -71,11 +71,11 @@ function App() {
   };
 
   // const { mutate: saveHistogram } = useHistogram( state.textInput )
-  async function saveHisto( url, { arg } ) {
+  async function saveHisto( url, { corpus } ) {
     return fetch( url, {
       method: 'POST',
-      body: JSON.stringify( arg )
-    } ).then( res => res.json() )
+      body: JSON.stringify( { histogram: { corpus } } )
+    } ).then( response => response.json() )
   }
   const {
     trigger,
