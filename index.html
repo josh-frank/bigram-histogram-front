@@ -10,5 +10,29 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>  </body>
+    <script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+    <script type="module">
+
+      const contentSecurityPolicy = {
+        'default-src': ["'self'",],
+        'script-src': ["'self'",],
+        'frame-src': ["'self'",],
+        'connect-src': ["'self'",],
+        'img-src': ["'self'",],
+        'style-src': ["'self'",],
+        'base-uri': ["'self'",],
+        'form-action': ["'self'",],
+      }
+      const cspTag = document.createElement('meta'),
+        formatCsp = Object.keys(contentSecurityPolicy).map(key => `${key} ${contentSecurityPolicy[key].join(' ')}`).join('; ')
+      cspTag.setAttribute('http-equiv', 'Content-Security-Policy')
+      cspTag.setAttribute('content', formatCsp)
+      document.getElementsByTagName('head')[0].appendChild(cspTag)
+
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log('%cHello D✓ecisionD✓eskHQ 👋', 'background-color: black; color: white; font-style: italic; border: 15px solid darkblue; font-size: 18px;');
+      });
+
+    </script>
+  </body>
 </html>
