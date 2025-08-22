@@ -74,7 +74,7 @@ function App() {
   async function saveHisto( url, { arg } ) {
     return fetch( url, {
       method: 'POST',
-      body: JSON.stringify( { histogram: { arg } } )
+      body: JSON.stringify( { histogram: { corpus: arg } } )
     } ).then( res => res.json() )
   }
   const {
