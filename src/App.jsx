@@ -9,7 +9,11 @@ import {
   // splitText,
 } from './utilities'
 import { exampleTexts } from './exampleTexts'
-import { useHistogram } from './hooks'
+import {
+  server,
+  // useHistogram
+} from './hooks'
+import useSWRMutation from 'swr/mutation'
 
 function App() {
 
@@ -18,7 +22,6 @@ function App() {
     textInput: '',
     minimumFrequency: 3,
   } );
-
 
   const histo = Object.entries( bigramHisto( state.textInput ) )
     .reduce( ( result, [ bigram, count ] ) => {
@@ -67,9 +70,19 @@ function App() {
     credits: { enabled: false, },
   };
 
-  const { mutate: saveHistogram } = useHistogram( state.textInput )
+  // const { mutate: saveHistogram } = useHistogram( state.textInput )
+  async function saveHisto( url, { arg } ) {
+    return fetch( url, {
+      method: 'POST',
+      body: JSON.stringify( arg )
+    } ).then( res => res.json() )
+  }
+  const {
+    trigger,
+    // isMutating
+  } = useSWRMutation( `${ server }/histogram`, saveHisto, /* options */ )
 
-  const handleSaveHistogram = async () => await saveHistogram( state.textInput )
+  const handleSaveHistogram = async () => await trigger( state.textInput )
   .then( ( response ) => {
     console.log( response );
     window.alert( `Success - view your histogram data at http://172.104.210.107/histogram/${ response.id }` );
