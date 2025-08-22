@@ -1,6 +1,6 @@
 export const exampleTexts = {
   'Custom text input': ``,
-  "A Modest Proposal": `
+  "A Modest Proposal (Swift)": `
   It is a melancholy object to those, who walk through this great town,
 or travel in the country, when they see the streets, the roads, and
 cabbin-doors crowded with beggars of the female sex, followed by three,
@@ -327,7 +327,7 @@ giving some pleasure to the rich. I have no children, by which I can
 propose to get a single penny; the youngest being nine years old, and
 my wife past child-bearing.
 `,
-  "Alice's Adventures in Wonderland (ch. 2)": `
+  "Alice's Adventures in Wonderland (Carroll) (ch. 2)": `
 “Curiouser and curiouser!” cried Alice (she was so much surprised, that
 for the moment she quite forgot how to speak good English); “now I’m
 opening out like the largest telescope that ever was! Good-bye, feet!”
@@ -526,7 +526,7 @@ birds and animals that had fallen into it: there were a Duck and a
 Dodo, a Lory and an Eaglet, and several other curious creatures. Alice
 led the way, and the whole party swam to the shore.
   `,
-  "The Happy Prince": `
+  "The Happy Prince (Wilde)": `
 HIGH above the city, on a tall column, stood the statue of the Happy
 Prince.  He was gilded all over with thin leaves of fine gold, for eyes
 he had two bright sapphires, and a large red ruby glowed on his

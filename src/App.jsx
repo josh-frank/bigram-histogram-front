@@ -12,85 +12,103 @@ import { exampleTexts } from './exampleTexts'
 
 function App() {
 
-  const [ exampleText, setExampleText ] = useState( 'Custom input' )
-  const [ textInput, setTextInput ] = useState( '' )
+  const [ state, setState ] = useState( {
+    exampleText: 'Custom input',
+    textInput: '',
+    minimumFrequency: 2,
+  } );
 
-  const histo = Object.entries( bigramHisto( textInput ) )
+  const histo = Object.entries( bigramHisto( state.textInput ) )
     .reduce( ( result, [ bigram, count ] ) => {
-      if ( count > 2 ) result.push( { bigram, count } );
+      if ( count > state.minimumFrequency ) result.push( { bigram, count } );
       return result;
     }, [] )
     .sort( ( thisBigram, thatBigram ) => thisBigram.count < thatBigram.count )
 
   // console.log( {
-  //   textInput,
+  //   textInput: state.textInput,
   //   histo,
-  //   // splitText: splitText( textInput ),
+  //   // splitText: splitText( state.textInput ),
   // } )
 
   const highchartsOptions = {
-        xAxis: {
-          categories: histo.map( ( { bigram } ) => bigram ),
-          crosshair: true,
-          title: { text: '', },
-        },
-        yAxis: {
-          allowDecimals: false,
-        },
-        tooltip: {
-          formatter: function() {
-            return `${ this.category }: ${ this.options.y }`;
+    xAxis: {
+      categories: histo.map( ( { bigram } ) => bigram ),
+      crosshair: true,
+      title: { text: '', },
+    },
+    yAxis: {
+      allowDecimals: false,
+    },
+    tooltip: {
+      formatter: function() {
+        return `${ this.category }: ${ this.options.y }`;
+      },
+    },
+    series: [ {
+        type: 'bar',
+        height: '80%',
+        data: histo.map( ( { count } ) => count ),
+    } ],
+    navigator: {
+      xAxis: {
+        labels: {
+          formatter: function () {
+            return this.count;
           },
-        },
-        series: [ {
-            type: 'bar',
-            height: '80%',
-            data: histo.map( ( { count } ) => count ),
-        } ],
-        navigator: {
-          xAxis: {
-            labels: {
-              formatter: function () {
-                return this.count;
-              },
-            }
-          },
-          // yAxis: {},
-        },
-        rangeSelector: { enabled: false, },
-        credits: { enabled: false, },
-      };
+        }
+      },
+      // yAxis: {},
+    },
+    rangeSelector: { enabled: false, },
+    credits: { enabled: false, },
+  };
 
   return <main>
 
-    <figure>
+    <form>
 
       <label htmlFor='example-text'>Select an example text:</label>
       &nbsp;
       <select
         name='example-text'
-        value={ exampleText }
+        value={ state.exampleText }
         onChange={ ( { target } ) => {
-          console.log( target.value )
-          setExampleText( target.value );
-          setTextInput( exampleTexts[ target.value ] );
+          setState( {
+            ...state,
+            exampleText: target.value,
+            textInput: exampleTexts[ target.value ],
+          } )
         } }
       >
-        { Object.keys( exampleTexts ).map( title => <option
-          key={ title }
-          value={ title }
-        >{ title }</option> ) }
+        { Object.keys( exampleTexts ).map( title => 
+          <option key={ title } value={ title }>{ title }</option>
+        ) }
       </select>
 
-    </figure>
+      <label htmlFor='minimum-freq'>Minimum frequency to display:</label>
+      &nbsp;
+      <input
+        type='number'
+        name='minimum-freq'
+        value={ state.minimumFrequency }
+        onChange={ ( { target } ) =>
+          setState( { ...state, minimumFrequency: parseInt( target.value ) } )
+        }
+        min={ 2 }
+      />
+
+    </form>
 
     <hr />
 
     <section>
 
       <textarea
-        value={ textInput }
-        onChange={ ( { target } ) => setTextInput( target.value ) }
+        value={ state.textInput }
+        onChange={ ( { target } ) =>
+          setState( { ...state, textInput: target.value } )
+        }
         rows={ 40 }
         cols={ 80 }
       ></textarea>
