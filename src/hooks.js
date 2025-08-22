@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 // import useSWRMutation from 'swr/mutation'
 
-export const server = import.meta.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://172.104.210.107/'
+export const server = import.meta.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://172.104.210.107'
 
 export const responseToJson = response => response.json()
 
